@@ -1,0 +1,18 @@
+\begin{table}
+\caption{Comparison of missing-value strategies (stratified 10-fold CV on the training set, mean $\pm$ std).}
+\label{tab:missing_values}
+\begin{tabular}{lllrllll}
+\toprule
+Set-up & Description & Model & Rows & Accuracy & Precision & Recall & F1 \\
+\midrule
+A & Median + most frequent & k-NN & 320 & 0.972 $\pm$ 0.022 & 1.000 $\pm$ 0.000 & 0.955 $\pm$ 0.035 & 0.977 $\pm$ 0.018 \\
+A & Median + most frequent & SGD & 320 & 0.994 $\pm$ 0.013 & 1.000 $\pm$ 0.000 & 0.990 $\pm$ 0.020 & 0.995 $\pm$ 0.010 \\
+B & Drop rbc + median & k-NN & 320 & 0.975 $\pm$ 0.023 & 1.000 $\pm$ 0.000 & 0.960 $\pm$ 0.037 & 0.979 $\pm$ 0.020 \\
+B & Drop rbc + median & SGD & 320 & 0.997 $\pm$ 0.009 & 1.000 $\pm$ 0.000 & 0.995 $\pm$ 0.015 & 0.997 $\pm$ 0.008 \\
+C & KNNImputer & k-NN & 320 & 0.959 $\pm$ 0.031 & 1.000 $\pm$ 0.000 & 0.935 $\pm$ 0.050 & 0.966 $\pm$ 0.027 \\
+C & KNNImputer & SGD & 320 & 0.991 $\pm$ 0.014 & 1.000 $\pm$ 0.000 & 0.985 $\pm$ 0.023 & 0.992 $\pm$ 0.012 \\
+D & Drop rows (dropna) & k-NN & 123 & 0.967 $\pm$ 0.040 & 1.000 $\pm$ 0.000 & 0.850 $\pm$ 0.189 & 0.907 $\pm$ 0.120 \\
+D & Drop rows (dropna) & SGD & 123 & 0.984 $\pm$ 0.032 & 1.000 $\pm$ 0.000 & 0.917 $\pm$ 0.171 & 0.947 $\pm$ 0.111 \\
+\bottomrule
+\end{tabular}
+\end{table}

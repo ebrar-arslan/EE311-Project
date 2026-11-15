@@ -14,6 +14,9 @@ pip install -r requirements.txt
 Run the scripts from the project root folder:
 ```bash
 python src/01_load_and_explore.py
+python src/02_split_and_visualize.py
+python src/03_preprocessing.py
+python src/04_compare_models.py
 ```
 
 ## Project structure
@@ -21,4 +24,6 @@ python src/01_load_and_explore.py
 data/     raw data (chronic_kidney_disease_full.arff)
 src/      Python scripts (step by step)
 images/   saved figures
+results/  saved result tables (CSV)
+docs/     experiment log (what we tried and why)
 ```

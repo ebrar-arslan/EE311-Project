@@ -116,3 +116,67 @@ missed CKD patient (false negative) is worse than a false alarm (Ch3).
 - Scores are already very high with simple models, which agrees with the
   literature on this dataset; the dataset is small, so final conclusions will
   be based on cross-validation mean ± std and the held-out test set.
+
+## Step 4 – Shortlist promising models
+**Script:** `src/04_compare_models.py`
+
+**What:** Compared the classifiers covered in the lecture notes so far, all with
+**default hyperparameters** and the preprocessing pipeline of step 3 (set-up A):
+| Model | Lecture notes | Why |
+|---|---|---|
+| `DummyClassifier(strategy="most_frequent")` | Evaluating Hypotheses | baseline; shows why accuracy alone is misleading on imbalanced data |
+| `SGDClassifier` | Ch3 | linear classifier (linear SVM by default) trained with SGD |
+| `KNeighborsClassifier` (k = 5) | k-NN | instance-based, distance-based model |
+| `LogisticRegression` | Ch4 | linear model that outputs class probabilities |
+| `RandomForestClassifier` | Ch3 (ROC / PR example) | non-linear model; also gives feature importances |
+
+Naive Bayes, SVM (kernel), decision tree and XGBoost from the project plan are
+postponed until they are covered in the lectures (remaining work).
+
+**Evaluation:** stratified 10-fold CV on the training set (320 rows).
+Metrics: accuracy, precision, recall, F1, UAR (unweighted average recall =
+balanced accuracy), ROC AUC; confusion matrices (raw and normalized by the true
+class) from `cross_val_predict`; ROC and precision–recall curves; learning curves
+(Ch4) to check for overfitting; feature importance.
+
+**Outputs:** `results/model_comparison.csv/.tex`, `images/model_comparison.png`,
+`images/confusion_matrices.png`, `images/confusion_matrices_normalized.png`,
+`images/roc_pr_curves.png`, `images/learning_curves.png`,
+`images/feature_importance.png`.
+
+**Results (mean over 10 folds)**
+| Model | Accuracy | Recall | F1 | UAR | ROC AUC | Missed CKD (FN) | False alarms (FP) |
+|---|---|---|---|---|---|---|---|
+| Dummy | 0.625 | 1.000 | 0.769 | 0.500 | 0.500 | 0 | 120 |
+| SGD | 0.994 | 0.990 | 0.995 | 0.995 | 1.000 | 2 | 0 |
+| k-NN | 0.972 | 0.955 | 0.977 | 0.978 | 1.000 | 9 | 0 |
+| Logistic Regression | 0.994 | 0.995 | 0.995 | 0.993 | 1.000 | 1 | 1 |
+| Random Forest | 0.991 | 0.995 | 0.993 | 0.989 | 0.999 | 1 | 2 |
+(FN / FP counted from `cross_val_predict` over the 320 training rows.)
+
+**Interpretation**
+- The dummy model reaches 62.5% accuracy and perfect recall by predicting "ckd"
+  for everyone, but its UAR is 0.5 and it gives 120 false alarms. This confirms
+  the lecture point that accuracy (and recall alone) can be misleading on
+  imbalanced data; UAR and the confusion matrix reveal the problem.
+- All real models are far above the baseline (accuracy 0.97–0.99, ROC AUC ≈ 1).
+  The differences between SGD, logistic regression and random forest are within
+  one standard deviation, so they are not significant on this small dataset.
+- k-NN has the lowest recall (0.955): it misses 9 CKD patients, the most costly
+  error here. Its default k = 5 has not been tuned yet.
+- Learning curves: training and validation F1 are close for all models
+  (e.g. logistic regression 1.000 vs 0.995), so there is no strong overfitting.
+- Most important attributes (random forest and logistic regression agree):
+  hemoglobin (hemo), packed cell volume (pcv), specific gravity (sg), serum
+  creatinine (sc), red blood cell count (rbcc) and albumin (al). Low hemo, pcv and
+  sg push towards CKD, high al and sc push towards CKD. This matches the
+  correlation analysis in step 2 and medical knowledge (anemia and kidney
+  function markers).
+- **Shortlist:** logistic regression, SGD and random forest (highest recall and
+  UAR, fewest missed CKD cases). k-NN is kept for the fine-tuning step only if
+  tuning k improves its recall.
+
+**Remaining work:** fine-tune the shortlisted models (`GridSearchCV`, e.g. C for
+logistic regression, alpha for SGD, n_estimators / max_depth for random forest,
+k for k-NN), add the models from the plan as they are covered in the lectures,
+then evaluate the final model once on the test set.

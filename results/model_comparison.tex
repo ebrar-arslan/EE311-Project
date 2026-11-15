@@ -1,0 +1,15 @@
+\begin{table}
+\caption{Comparison of classifiers with default hyperparameters (stratified 10-fold CV on the training set, mean $\pm$ std, positive class = CKD).}
+\label{tab:model_comparison}
+\begin{tabular}{lllllll}
+\toprule
+Model & Accuracy & Precision & Recall & F1 & UAR & ROC AUC \\
+\midrule
+Dummy (most frequent) & 0.625 $\pm$ 0.000 & 0.625 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & 0.769 $\pm$ 0.000 & 0.500 $\pm$ 0.000 & 0.500 $\pm$ 0.000 \\
+SGD & 0.994 $\pm$ 0.013 & 1.000 $\pm$ 0.000 & 0.990 $\pm$ 0.020 & 0.995 $\pm$ 0.010 & 0.995 $\pm$ 0.010 & 1.000 $\pm$ 0.000 \\
+k-NN & 0.972 $\pm$ 0.022 & 1.000 $\pm$ 0.000 & 0.955 $\pm$ 0.035 & 0.977 $\pm$ 0.018 & 0.978 $\pm$ 0.018 & 1.000 $\pm$ 0.001 \\
+Logistic Regression & 0.994 $\pm$ 0.012 & 0.995 $\pm$ 0.014 & 0.995 $\pm$ 0.015 & 0.995 $\pm$ 0.010 & 0.993 $\pm$ 0.014 & 1.000 $\pm$ 0.000 \\
+Random Forest & 0.991 $\pm$ 0.020 & 0.991 $\pm$ 0.027 & 0.995 $\pm$ 0.015 & 0.993 $\pm$ 0.015 & 0.989 $\pm$ 0.025 & 0.999 $\pm$ 0.004 \\
+\bottomrule
+\end{tabular}
+\end{table}
